@@ -1,0 +1,23 @@
+
+To go through the file and count bytes, words and lines let's use bufio package.
+
+Directly length of file would give us the byte sized but what about other ??
+Lets use ReadRune so we could cover the rest by checking the characters
+
+Some assumptions we make to move forward:
+if char is \n we can assume next line
+check the given rune is a space character --> inbuilt unicode ==> to get word count    CAUTION: IT IS WRONG, PS: realised later
+
+Results time :
+expected : 7145   58164  342190 test.txt
+my output: 7145   67340  342190 test.txt
+
+:(  my word count is wrong :(
+
+check the given rune is not a space character --> see if it is inside word ?? !! ==> wordcount
+
+7145 58164 342190 test.txt 
+Hurrayyyyy !!
+
+Ok found a better option.. hehe 
+bufio Scanner can do this using splits but reader has better flexibility right !
