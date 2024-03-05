@@ -7,15 +7,19 @@ import (
 	"net/http"
 )
 
-type LoadBalancer struct {
+type LoadBalancer interface {
+	handleRequest(w http.ResponseWriter, r *http.Request)
+	Run()
+}
+type LoadBalancerImpl struct {
 	Config *utils.Config
 }
 
-func NewLoadBalancer(config *utils.Config) *LoadBalancer {
-	return &LoadBalancer{Config: config}
+func NewLoadBalancer(config *utils.Config) LoadBalancer {
+	return &LoadBalancerImpl{Config: config}
 }
 
-func (lb *LoadBalancer) handleRequest(w http.ResponseWriter, r *http.Request) {
+func (lb *LoadBalancerImpl) handleRequest(w http.ResponseWriter, r *http.Request) {
 	// request recieved on this LB server
 	fmt.Println("Received request from:", r.RemoteAddr)
 
@@ -45,7 +49,7 @@ func (lb *LoadBalancer) handleRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Sent response to client from load balancer")
 }
 
-func (lb *LoadBalancer) Run() {
+func (lb *LoadBalancerImpl) Run() {
 	http.HandleFunc("/", lb.handleRequest)
 
 	address := fmt.Sprintf("%s:%d", lb.Config.LB_HOST, lb.Config.LB_PORT)
@@ -55,4 +59,17 @@ func (lb *LoadBalancer) Run() {
 	if err != nil {
 		fmt.Println("Error starting server:", err)
 	}
+}
+
+func main() {
+	logger := utils.NewStdLogger()
+
+	config, err := utils.LoadConfig("config/config.yaml")
+	if err != nil {
+		logger.Error("Error loading config:", err)
+		return
+	}
+
+	lb := NewLoadBalancer(&config)
+	lb.Run()
 }
