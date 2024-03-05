@@ -94,6 +94,10 @@ References and learning:
 
 https://youtu.be/_uk9BN3a0eo?si=FZi-N189IO0qtMiy
 
+https://go.dev/doc/articles/wiki/
+
+https://gobyexample.com/http-servers
+
 
 
 
