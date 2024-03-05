@@ -5,12 +5,14 @@ import (
 )
 
 func main() {
+	logger := utils.NewStdLogger()
+
 	config, err := utils.LoadConfig("config/config.yaml")
 	if err != nil {
-		utils.LogError("Error loading config:", err)
+		logger.Error("Error loading config:", err)
 		return
 	}
 
-	lb := NewLoadBalancer(config)
+	lb := NewLoadBalancer(&config)
 	lb.Run()
 }
