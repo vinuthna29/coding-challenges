@@ -1,3 +1,3 @@
-module loadBalancer
+module lb
 
 go 1.19
