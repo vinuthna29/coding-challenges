@@ -1,0 +1,4 @@
+lb_host: "127.0.0.1"
+lb_port: 8080
+backend_host: "127.0.0.1"
+backend_port: 9090

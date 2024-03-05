@@ -60,6 +60,8 @@ https://network-insight.net/2015/10/29/gtm-load-balancer/
 
 https://www.youtube.com/watch?v=_F191vMUlVE&list=PLyqga7AXMtPNjF0Ms9ByYZtH7U46yCe0y
 
+https://www.codereliant.io/lets-build-loadbalancer-go/
+
 
  
 ---------------------------------------------------------------------------------

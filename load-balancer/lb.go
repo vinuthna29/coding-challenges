@@ -3,25 +3,26 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"lb/utils"
 	"net/http"
 )
 
-const (
-	LB_HOST = "127.0.0.1"
-	LB_PORT = 8080
+type LoadBalancer struct {
+	Config *utils.Config
+}
 
-	BACKEND_HOST = "127.0.0.1"
-	BACKEND_PORT = 9090
-)
+func NewLoadBalancer(config *utils.Config) *LoadBalancer {
+	return &LoadBalancer{Config: config}
+}
 
-func handleRequest(w http.ResponseWriter, r *http.Request) {
+func (lb *LoadBalancer) handleRequest(w http.ResponseWriter, r *http.Request) {
 	// request recieved on this LB server
 	fmt.Println("Received request from:", r.RemoteAddr)
 
 	// forward the recieved request to the backend server
 	fmt.Println("Forwarding request to backend server:", r.URL.Path)
 
-	backendUrl := fmt.Sprintf("http://%s:%d%s", BACKEND_HOST, BACKEND_PORT, r.URL.Path)
+	backendUrl := fmt.Sprintf("http://%s:%d%s", lb.Config.BACKEND_HOST, lb.Config.BACKEND_PORT, r.URL.Path)
 	response, err := http.Get(backendUrl)
 	if err != nil {
 		http.Error(w, "Error forwarding request to backend server", http.StatusInternalServerError)
@@ -44,10 +45,10 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Sent response to client from load balancer")
 }
 
-func main() {
-	http.HandleFunc("/", handleRequest)
+func (lb *LoadBalancer) Run() {
+	http.HandleFunc("/", lb.handleRequest)
 
-	address := fmt.Sprintf("%s:%d", LB_HOST, LB_PORT)
+	address := fmt.Sprintf("%s:%d", lb.Config.LB_HOST, lb.Config.LB_PORT)
 	fmt.Printf("Server listening on %s\n", address)
 
 	err := http.ListenAndServe(address, nil)
