@@ -1,0 +1,101 @@
+LOAD BALANCER:
+
+To make networking more efficient, load balancers are used to deal with the traffic.
+Avoids overloading
+
+
+There are two main approaches to load balancing:
+
+Dynamic, which takes into account the current state of each of the backend servers, and
+Static, which distributes traffic according to a static algorithm, without considering the state of the server.
+
+Static:
+ Round robin scheduling
+ Weighted Round robin scheduling
+ Randomized
+ Hash
+Dynamic:
+ Least connection
+ Weighted Least connection
+ Weighted response time
+ Resource based
+
+ Uses:
+
+ Widely used in HTTP request management of sites to handle large number of requests per second.
+ ex: popular websites, high bandwidth FTP sites, DNS servers and databases
+ 
+ How to deal in these scenarios?
+ Increase number of servers --> horizontal scaling..
+ How do we know how many servers to use and distribute the requests?
+ ==> use load balancers !!
+
+ Round robin scheduling is simple and dumb just sending requests to each server
+
+ Least connection -> the connections each server has currently is taken into consideration and 
+                    a new client request is sent to the server with least connection.
+                    Sounds efficient right ?
+
+ Why not use least connection or response time based load balancers all the time?
+ Costly.. thus only useful in large scale scenarios
+
+
+
+ Round Robin DNS
+ DNS delegation
+ Client-side random load balancing
+ Server-side load balancers
+
+---------------------------------------------------------------------------------
+
+References and learning:
+
+https://youtu.be/sCR3SAVdyCc?si=Cbtj0AHaGfaIE3fx
+
+https://blog.bytebytego.com/p/ep47-common-load-balancing-algorithms
+
+https://youtu.be/chyZRNT7eEo?si=Tw1q3PeQ4ysLqx7h
+
+https://network-insight.net/2015/10/29/gtm-load-balancer/
+
+https://www.youtube.com/watch?v=_F191vMUlVE&list=PLyqga7AXMtPNjF0Ms9ByYZtH7U46yCe0y
+
+
+ 
+---------------------------------------------------------------------------------
+CONCURRENCY IN GOLANG
+
+goroutine : use go keyword before a func
+             for concurrently perform various functions at a time 
+             problem: the main func may end up earlier than the go routine suggesting we maynot be able to perform all the goroutines.
+             sol: we can use some time to sleep and customize as per requirement. better way : use channels
+
+channel :  make(chan bool) type of channel may vary can be string etc
+            main <- channel <- goroutine 
+            only after goroutine is executed the main func is signaled by the channel.
+            prob: what if some channel value is altered from the main func also?
+            deadlock! Y? ==> default capacity of a channel is 0 i.e when we put a msg in it,
+             it needs some other goroutine to recieve the msg immediately
+            sol: buffered channels
+
+buffered channel: make(chan string, 2) 2 is the capacity of the channel
+                  FIFO queue
+
+waitgroup:
+
+mutex:
+
+resource pool:
+
+
+---------------------------------------------------------------------------------
+
+References and learning:
+
+https://youtu.be/_uk9BN3a0eo?si=FZi-N189IO0qtMiy
+
+
+
+
+
+
